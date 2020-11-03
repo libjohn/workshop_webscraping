@@ -1,0 +1,25 @@
+---
+title: "README"
+author: "John Little"
+date: "`r Sys.Date()`"
+abstract:  "\nstatus: developing\n"
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+status: developing  
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## A workshp case study
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Using the `rvest` library to learn about web scraping in R
