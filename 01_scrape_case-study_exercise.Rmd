@@ -1,18 +1,18 @@
 ---
 title: "rvest tutorial demonstration"
 author: "John Little"
-date: "November 3, 2020"
+date: "`r Sys.Date()`"
 output: html_notebook
 ---
 
 license: "CC BY-NC"  
-Creative Commong:  Attribution, Non-Commerical  
+Creative Commons:  Attribution-NonCommerical  
 https://creativecommons.org/licenses/by-nc/4.0/  
 
 
 ## Load library packages
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(rvest)
 library(htmltools)
@@ -35,7 +35,19 @@ results <- read_html("http://www.vondel.humanities.uva.nl/ecartico/persons/index
 
 The `results` object is a _list_ (R data type.)  The items in the list correspond to the basic document structure of an HTML document...
 
+Displaying the `results` object shows that the first item in the _list_ is `head`.  The second item is `body`.  These items correspond to the basic structure of the HTML document type definition.  In other words, the _text, links_, and HTML "stuff" were scraped from the web page.  Specifically this stuff is found in the _body_ element of the HTML document. This stuff is now stored in the `body` element of the `restults` _list_.
+
+**Contents of the `results` object**
+
+```{r}
+results
 ```
+
+**Example HTML**
+
+A simplified example HTML document
+
+```html
 <HTML>
   <HEAD>
     <title>my example document</title>
@@ -47,12 +59,7 @@ The `results` object is a _list_ (R data type.)  The items in the list correspon
 </HTML>
 ```
 
-Displaying the object name, i.e. `results`, shows that the first item in the _list_ is `head`.  The second item is `body`.  These items correspond to the basic structure of the HTML document type definition.  In other words, the _text, links_, and HTML "stuff" were scraped from the web page.  Specifically this stuff is found in the _body_ element of the HTML document. This stuff is now stored in the `body` element of the `restults` _list_.
 
-
-```{r}
-results
-```
 
 ### Procedure
 
@@ -62,8 +69,8 @@ The basic workflow of web scraping is
 
     - Import raw HTML of a single target page (page detail, or "leaf")
     - _Parse_ the HTML of the test page to gather the data you want
-    - In a web browser, browse and understand the site navigation of the scrape target (site navigation, or "branches")
-    - _Parse_ the site navigation to develop an interation plan
+    - In a web browser, manually browse and understand the site navigation of the scrape target (site navigation, or "branches")
+    - _Parse_ the site navigation and develop an interation plan
     - Iterate:  write code that implements iteration, i.e. automated page _crawling_ 
     - Perform a dry run with a limited subset of the target web site
     - check robots.txt, terms of use, and construct time pauses (to avoid DNS attacks)
@@ -77,14 +84,30 @@ The basic workflow of web scraping is
         
 ### Parse the nodes of the HTML tree.  
 
-I will use the idea of a site tree and a document tree to convey both a web page and a web site.  Both have a hierarchical structure.  
+A web page is composed of HTML and prose.  The web document, just as the web site, has a hierarchical structure.  Web scraping means parsing these structures to gather needed information.
 
-First, subset a single document (i.e. a web page or a leaf of the site).  Then subset the HTML of that document into the desired nodes of the HTML document tree.  In other words, identify the the `body` section of the `results` _list_. Then, parse the text of the HTML document.  In the example, below, we gather all the HTML tagging within the `<li>` tags.  `li` stands for "list item".  You can learn more about the _li_ tag structure from [HTML documentation](https://www.w3schools.com/TAGS/tag_li.asp).
+The first step is to start with a single target single document (i.e. a web page or a leaf of the site).  In this case, the document we want to parse is the [summary navigation page](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse) consisting of the first 50 names listed alphabetically in this web site. The goal is to parse the HTML source of that web page (i.e. document) by traversing the nodes of the document's HTML structure.  In other words, we want to mine text and data from the `body` section of the `results` _list_.  In this example I'll gather all the HTML within the `<li>` tags.  
 
-Briefly...
+`li` stands for "list item".  You can learn more about the _li_ tag structure from [HTML documentation](https://www.w3schools.com/TAGS/tag_li.asp).
 
-- Subset the _list item_ **nodes** of the `body` of the HTML document tree.  This is done with the `html_nodes` function.`html_nodes("li")`
-- and then, use the `html_text()` function to parse only the text of the list item
+**Goal:  Briefly...**
+
+- limit the results to the _list item_ **nodes** of the `body` of the HTML document tree.  This is done with the `html_nodes()` function.`html_nodes("li")`
+- Use the `html_text()` function to parse the text of the HTML _list item_ (i.e. the `<li>` tag)
+
+**For Example**
+
+in an HTML document that has tagging such as this:
+
+```html
+<li><a href="/ecartico/persons/17296">Anna Aaltse (1715 - 1738)</a></li>
+```
+
+I want to gather the text within the `<li>` tag:  **Anna Aaltse (1715 - 1738)**
+
+**CODE**
+
+Using the `html_nodes()` and `html_text()` functions, I can retrieve all the text within `<li></li>` tags.
 
 ```{r}
 names <- results %>% 
@@ -96,17 +119,21 @@ names
 
 ### Parse the HTML attributes of an HTML tag...
 
-Of course, you may want more than just the HTML text.  You may also want attributes of HTML tags.  For example, to get the URL of a hypertext link within a list item, you need to parse the HREF argument of an anchor tag.  _HREF_ is an argument of the anchor tag (_A_.)  Just as above, check HTML documentation to learn more about the anchor tag. 
+Beyond the text you may also want attributes of HTML tags.  To mine the URL of a hypertext link `<a href="URL"></a>`, within a list item, you need to parse the HREF argument of an anchor tag.  If you're new to web scraping, you're going to need to learn something about HTML tags, such as the [anchor tag](https://www.w3schools.com/TAGS/tag_a.asp).
 
-If you're new to web scraping, you're going to need to learn something about HTML tags, such as the [anchor tag](https://www.w3schools.com/TAGS/tag_a.asp).
+**For Example**
 
-```
-<a href="https://google.com">Example google Link</a>
+in an HTML document that has tagging such as this:
+
+```html
+<a href="https://search.com">Example Link</a>
 ``` 
 
-Now you know what an _href_ **attribute** is.  Use the `rvest::html_attr()` function to parse the link.
+I want to gather the value of the `href` attribute within the anchor tag:  **https://search.com**
 
-> `html_attr("href")`
+**CODE**
+
+Using the `html_nodes()` and `html_attr()` functions, I can retrieve all the attribute values within `<li><a></a></li>` tags.
 
 ```{r}
 url <- results %>% 
@@ -116,20 +143,21 @@ url <- results %>%
 url
 ```
 
-Note that the above links, or _hrefs_, are relative paths.  I still need the base URL.
+Note that the above links, or _hrefs_, are relative URL paths.  I still need the domain name for the web server `http://www.vondel.humanities.uva.nl`.
 
 ## Systematize
 
-Above I created two vectors, one vector, `names`, is the `html_text` parsed from the body of the _list items_.  The other vector, `url`, is a vector of the values of the _href_ arguments. 
+Above I created two vectors, one vector, `names`, is the `html_text` that I parsed from the `<li>` tags within the `<body>` of the HTML document.  The other vector, `url`, is a vector of the values of the `href` attribute of the anchor `<a>` tags. 
 
 Placing both vectors into a tibble makes manipulation easier when using tidyverse techniques.
 
-The goal is to create a systematic workflow by building a tibble consisting of each of the 50 names listed in the summary results set, found on [this page](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse).  And, of course, you will still need to do more data cleaning.  
+**Goal**
 
-### Start
+I want to develop a systematic workflow that builds a tibble consisting of each of the 50 names listed in the summary `results` object retrieved by `read_html()` performed on [this page](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse).  Of course, mining and parsing the data is just the beginning.  Data cleaning is a vital and constant aspect of web scraping.
 
-From above we have links in a `url` vector, and target names in a `names` vector, for fifty names from the target website we want to crawl.  Of course you also want to parse data for  each person in the database.  In other words we need the names listed on each summary page of fifty names, starting with the first result page.  To do this we need to read (aka import, i.e. `read_html`) the HTML for each name, then _parse_ the HTML of each page.  Below is an example of how to systematize the workflow. To do that, we'll make a results tibble, `results_df`.
+### Build Tibble
 
+Using vectors from parsing functions above....
 
 ```{r}
 results_df <- tibble(names, url)
@@ -137,65 +165,73 @@ results_df <- tibble(names, url)
 results_df
 ```
 
-Now create some new variables with `mutate`.  Build a **full** URL from the _url path_ (the `url` vector) and the _base_url_ of the target site.  Since we only scraped the URL **path**, we have to construct a **full** URL.
+From above we have links in a `url` vector, and target names in a `names` vector, for fifty names from the target website we want to crawl.  Of course you also want to parse data for  each person in the database.  To do this we need to read (i.e. `read_html()`) the HTML for each  relevant `url` in the results_df tibble.  Below is an example of how to systematize the workflow. To do that, we'll make a results tibble, `results_df`.  But first, more data cleaning...
+
+Create some new variables with `mutate`.  Build a **full** URL from the _relative URL path_ (i.e. the `url` vector) and the domain or _base URL_ of the target site.  Since we scraped the relative URL **path**, we have to construct a **full** URL.
 
 ```{r}
-results_df <- results_df %>% 
-  mutate(base_url = "http://www.vondel.humanities.uva.nl") %>% 
-  mutate(full_url = glue::glue("{base_url}{url}")) %>% 
-  mutate(full_url = str_replace_all(full_url, "\\.\\.", ""))
+urls_to_crawl_df <- results_df %>% 
+  mutate(full_url = glue::glue("http://www.vondel.humanities.uva.nl{url}")) %>% 
+  mutate(full_url = str_replace_all(full_url, "\\.\\.", "")) %>% 
+  select(full_url)
 
-results_df
+urls_to_crawl_df  
 ```
 
 As you can see, above, it's really helpful to know about Tidyverse text manipulation, specifically `mutate`,  [`glue`](https://glue.tidyverse.org/), and [pattern matching and regex](https://r4ds.had.co.nz/strings.html) using the [stringr package](https://stringr.tidyverse.org/).
 
 ### Operationalize the workflow
 
-To operationalize this part of the workflow, you want to iterate over the vector `full_url` found in the `resutls_df` tibble. Then `read_html` for each name that interest you.  Remember that only 50 of the 54 rows in the `resutls_df` tibble are target names to crawl. So, really, you still have some data wrangling to do.  How can you eliminate the four rows in the `results_df` tibble that are not targets (i.e. names)?  Somewhere, below, I'll also show you how to exclude the four rows of unnecessary/unhelpful information.
+To operationalize this part of the workflow, you want to iterate over the vector `full_url` found in the `urls_to_crawl_df` tibble. Then `read_html` for each name that interest you.  Remember that only 50 of the 54 rows in the `resutls_df` tibble are target names to crawl. So, really, you still have some data wrangling to do.  How can you eliminate the four rows in the `results_df` tibble that are not targets (i.e. names)?  Somewhere, below, I'll also show you how to exclude the four rows of unnecessary/unhelpful information.
 
 ## Navigation and crawling
 
-Systematically crawl the site's navigation links of each summary results page.  Remember, each results page gives a summary of fifty names with links to the detail record to each name.  And, each target summary results page consists of not only the summary of 50 target names and links, but also links to the web site navigation.  Navigation links are the **key to crawling** through to the other summary results pages.  You need to write code that crawls through the navigation links of each summary results page.  Since each single summary results page has fifty links of target names, you want navigation links and also name links from the target website.  
+Meanwhile, we still have the **goal to systematically crawl the site's navigation links** for each of the 20+ summary results pages, each of which consists of fifty names.  Remember, each summary results page also has links to web site **navigation**.  Navigation links are the **key to crawling** through the other summary results pages.  You will need to write code that crawls through the navigation links, then `read_html()` for each of the fifty name/urls in that particular summary results page.  
 
-Therefore, one crawling **goal** is to build up a tibble that contains URLS for each summary results page.  So far we only have links to names,  We don't have links to the summary results pages.  Let's get the navigation links from page two.  The link to the second summary page was found in the navigation section of the first results page **at the web site**, in the browser.  
+Therefore, one crawling **goal** is to build up a tibble that contains URLS for each summary results page.  So far we only have links to fifty names from the first summary results page.  We don't have the URLs for each of the 20+ navigation pages. How do we get those? First find the pattern for the links to the navigation pages.  Let's get the navigation link to the [second summary results page](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse&field=surname&strtchar=A&page=2).  
 
-```{r}
-results_page2 <- read_html("http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse&field=surname&strtchar=A&page=2")
+```html
+http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse&field=surname&strtchar=A&page=2
 ```
 
-### Deconstructing web page and site design
+After some investigation of the the HTML source, I see the only difference bewteen navigation URLS is the value of the URL argument `page=`.  Eventually we need to construct a tibble with all the URLs for each of the navigation pages.  But first, let's learn a bit more about HTML parsing.
 
-As noted above, you need to know about HTML.  You also need to know about [CSS (Cascading Style Sheets)](https://en.wikipedia.org/wiki/CSS).  
+### Deconstructing a single target page and site design
 
-Below we parse the text and attributes of only the **summary navigation** section of the results page.  Successfully crawling the target data means you must successfully understand the navigation structure of the site, or at least understand the navigation of the part of the site that interest you. 
+So far we've used `rvest` functions and learned a little HTML.  You **also need to know about** [**CSS** (Cascading Style Sheets)](https://en.wikipedia.org/wiki/CSS).  
 
-As stated, you often need to know something about CSS.  You can follow the link above for a definition of CSS.  Or, I recommend playing this [CSS game](https://flukeout.github.io/) as a fun and quick way to learn just enough CSS.  I completed the first 15 levels of the game; that was enough to get a good foundation with CSS.  Depending on the complexity of the HTML and CSS, you may need to know a little more or a little less.  But you need to know something about HTML and CSS.
+You can follow the link above for a definition of CSS.  As a quickstart appraoch, I recommend playing this [CSS game](https://flukeout.github.io/) as a fun and quick way to learn just enough CSS.  I completed the first 15 levels of the game; that was enough to get a good foundation with CSS.  Depending on the complexity of the HTML and CSS, you may need to know a little more or a little less.  But you need to know something about HTML and CSS.
 
-We'll use **CSS** to subset the HTML navigation of a single summary results target page.  I didn't mention it before but, you often need to [view the source of the HTML](https://www.lifewire.com/view-html-source-in-chrome-3466725); use the [chrome browser to inspect elements](https://www.wikihow.com/Inspect-Element-on-Chrome) of pages in a web browser; and use the chrome browser extension, [selector gadget](https://rvest.tidyverse.org/articles/selectorgadget.html), to better understand the HTML and CSS tagging and structure.  
+**CSS** will help us subset the HTML for a single target page.  I didn't mention it before but, you often need to [view the source of the HTML](https://www.lifewire.com/view-html-source-in-chrome-3466725); use the [chrome browser to inspect elements](https://www.wikihow.com/Inspect-Element-on-Chrome) of pages in a web browser; and use the chrome browser extension, [selector gadget](https://rvest.tidyverse.org/articles/selectorgadget.html), to better understand the HTML and CSS tagging and structure.  
 
-This is key.  When you are web scraping, you are effectively reverse engineering the web site.  To reverse engineer it, you must have a solid understanding of the target site's structure, the site navigation, HTML, and CSS.  Knowledge of the site structure is independent of R, `rvest`, _lists_, and `purrr`.
+This is key.  When web scraping, you are effectively reverse engineering the web site.  To reverse engineer it, you must have a solid understanding of the target site's structure, the site navigation, HTML, and CSS.  Knowledge of the site structure is independent of R, `rvest`, _lists_, and `purrr`.
 
-Anyway, an example of a CSS element in the results page is _subnav_.  For example, viewing the source HTML of one summary results page shows that there is a `<div>` tag with a _subname_ CSS element
+Anyway, an example of a CSS element in the results page is 'class' attribute of the `<div>` tag.  In the case below we also have a class value of "subnav".  Viewing the source HTML of one summary results page will show the `<div>` tags with the CSS _class_ element.
 
-```
-<div class="subnav">
-  ...
-  ...
-  ...
+**For Example**   
+
+Use is `html_nodes()` with `html_text()`, and `html_attr()` to parse the anchor tag nodes, `<a>`, found within the `<div>` tags which contain the `class="subnav"` attribute.
+
+```html
+<div class = "subnav">
+    ...
+    <a href="/ecartico/persons/index.php?subtask=browse&amp;field=surname&amp;strtchar=A&amp;page=3">[101-150]</a>
+    ...
 </div>
 ```
 
-The goal is to import the _anchor_ tags nodes found within the _div_ tag part of the HTML tree, specifically the div tag that has a CSS class of _subnav_.
+**CODE**  
+
+Parse the **text** of the navigation bar.
 
 ```{r}
-results %>% 
+results %>% #html_nodes("div.subnav")
   html_nodes("div.subnav a") %>% 
   html_text()
 
 ```
 
-Above we parse the **text** of the navigation bar.  Below we parse the HTML _href_ attribute to get the URL.
+Parse the HTML _href_ **attribute** to get the URL.
 
 ```{r loop}
 navigation <- results %>% 
@@ -205,8 +241,7 @@ navigation <- results %>%
 navigation
 ```
 
-
-## Crawl summary results pages
+### Crawl summary results pages
 
 We want to gain a clear sense of the predictable navigation structure of our target site, and the navigation URLs, so that we can **crawl** through each page of the target site.  Again, the task before us is to do this crawling systematically.  Let's put the `navigation` object into a tibble data-frame called `nav_df`.
 
@@ -215,20 +250,24 @@ nav_df <- tibble(navigation)
 nav_df
 ```
 
-Clean data in the tibble, `nav_df`, so that only the unique URLs for each 50-result summary page remain.  Notice there are many missing summary page links.  We know this because we have a link for page 2, 3, 4, 5, and 22.  This mirrors what we see when we view the actual target web page in a web browser.  The target page is composed of HTML and CSS and comprises what we have in our imported `results` and `results2` pages, above.  In a web browser, **view** the HTML **source** of one of the summary pages.  Then you'll see the unparsed HTML:  `http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse`   The unparsed HTML is what you have in `results`.  After you crawl, and import, you need to parse.
+In the above tibble, I see I need to **clean** the `nav_df$navigation` vector so that only the unique URLs for each 50-result summary page remain.  One problem is there are only 14 rows and a lot of redundancy and many missing summary page URLS.  One reason I know this is that I have a link for page 2, 3, 4, 5, and 22; but nothing, no URLs for pages between pages 6 and 21.  This mirrors what we see when we [view the actual target web page in a web browser](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse).  That is, I have links for **results** [1-50], [51-100], [100-150], but nothing for [251-260] (i.e. page 6), etc.  The target page is composed of HTML and CSS and comprises what we have in our imported `results` object, above.  To confirm my investigation, I'll use a web browser to **view** the HTML **source** of one of the summary pages.  The unparsed HTML is what you have in `results` object.  
 
-Each navigation link is the same, except for the difference in the `page=` element found at the end of the URL argument.  
+What I see in the view source or the `nav_df$navigation` vector is that each navigation URL is the same, **except** for the difference in the `page=` element found at the end of the URL argument.  
 
-### What do we know so far?
+### Mini review summary
 
-We can see that the navigation URL pattern is predictable.  We can construct a full URL for each summary results target page. We can make a tibble with all these links, one row for each link to each navigation section of each summary results page of the target site. Once we have this, we can write a script to systematically browse, or crawl, through the target site just as if we manually mouse-clicked each link in a web browser.  We will use tidyverse packages to crawl through the site and `rvest::html_read()` to import the HTML.  After we crawl each page, we'll parse the target HTML data.
+We can see that the navigation URL pattern is predictable.  We can construct a full URL for each summary results target page. We can make a tibble with all these links, one row for each URL to each navigation section of each summary results page of the target site. Once we have this, we can write a script to systematically browse, or crawl, through the target site just as if we manually mouse-clicked each link in a web browser.  We will use tidyverse packages to crawl through the site and `rvest::html_read()` to import the HTML.  After we crawl each page, we'll parse the target HTML data.
 
-### Developing a plan for testing
+### Develop a plan 
 
-Let's start by importing the HTML of a single summary results page and then making a small tibble of just the navigation links found within the gathered _div_ HTML tags, i.e. the div tags with the _subnav_ CSS class.  
+**Goal** make a tibble with all the navigation links
 
-After we gather those navigation links, we wrangle the data so that only the distinct navigation URLs remain:  `distinct()`.  Why did we have duplicate links?  Look at the whole page of one of the 50 link summary pages in a web browser.  See any duplication?  If not, look closer.
+Let's start by importing the HTML of a single summary results page.  Then I'll make a tibble of the navigation links found within the gathered and relevant `<div>` HTML tags, i.e. the div tags with the _subnav_ CSS class.  We did that with the `nav_df` tibble.
 
+After we gather those navigation links in `nav_df$navigation`, we will wrangle and expand the vector to include only the relevant navigation URLs.  But, why did we have duplicate navigation URLS in that vector?  Look at the [summary page](http://www.vondel.humanities.uva.nl/ecartico/persons/index.php?subtask=browse) in a web browser.  See any duplication?  If not, look closer.
+
+
+Below, use `dplyr::distinct()` and `stringr::string_extract()` among other tidyverse functions to wrangle a tibble of relevant links.  
 
 ```{r}
 nav_df <- nav_df %>%
@@ -244,11 +283,13 @@ There's some _fancy_ regex pattern matching taking place in the data wrangling c
 
 Anyway...
 
-The maximum number of summary pages in the `navigation$page_no` variable is 22.  This should mean the maximum number of links to names in summary results pages will be equal to, or slightly less than, 22 * 50 (i.e. `r 22 * 50`.)  Regardless of the total number of target names/pages, our task is to build a tibble with a URL for each summary results page, i.e. pages 1 thorough 22.  Only then can we get a link for each person.  Honestly, building this list of navigation URLs takes some effort in R, especially if you're new to R.  
+Now all we need to do is expand the sequence of pages.  (Hint: `tidyr::expand()` )
 
-(So, maybe, there's an easier way.  It might be easier to build the range of summary page URLs in Excel, then import the excel file (or CSV file) of URLs into R for crawling via `rvest`.  But that's not a very reproducible approach.)  
+The maximum number of summary pages in the `navigation$page_no` variable is 22.  This should mean the maximum number of URLs to summary results pages will be roughly 22. Regardless of the total number of target names/pages, our task is to build a tibble with a URL for each summary results page, i.e. pages 1 thorough 22.  IF we have a link to each sumamry results page, then can we get a link for each of the fifty people listed on each of the summary result pages.  
 
-See example code, below, for a reproducible example.  With the next code chunk, you can use Tidyverse techniques and build a tibble of urls to iterate over. In this case, the important reproducible step use `stringr::str_extract()` to find and match the url pattern.  
+Honestly, building this list of navigation URLs takes some effort in R, especially if you're new to R.  So, maybe, there's an easier way.  It might be easier to build the range of summary page URLs in Excel, then import the excel file (or CSV file) of URLs into R for crawling via `rvest`.  But I want a reproducible, code-based approach.  
+
+See example code, below, for a reproducible example.  With the next code chunk, you can use Tidyverse techniques and build a tibble of urls to iterate over. In this case, the important reproducible step use `stringr::str_extract()` to find and match the URL pattern.  
 
 ```{r}
 nav_df <- nav_df %>% 
@@ -317,7 +358,7 @@ But first, I want to expand the three lists so I have a single tibble of 150 URL
 
 ```{r}
 results_by_page <- tibble(summary_url = nav_results_list$summary_url, 
-                          uri =
+                          url =
                             map(nav_results_list$html_results,
                                 ~ .x %>%
                                   html_nodes("ul li a") %>%
@@ -333,7 +374,7 @@ results_by_page <- tibble(summary_url = nav_results_list$summary_url,
 results_by_page
 
 results_by_page %>% 
-  unnest(cols = c(uri, name)) %>% 
+  unnest(cols = c(url, name)) %>% 
   filter(!str_detect(name, "ECARTICO")) %>% 
   filter(!str_detect(name, "^\\+"))
   
@@ -397,3 +438,5 @@ https://library.duke.edu/data
 Creative Commons:  Attribution-NonCommercial 4.0  
 https://creativecommons.org/licenses/by-nc/4.0
 </center>
+
+&nbsp;  
