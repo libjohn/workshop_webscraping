@@ -90,12 +90,12 @@ The first step is to start with a single target single document (i.e. a web page
 
 `li` stands for "list item".  You can learn more about the _li_ tag structure from [HTML documentation](https://www.w3schools.com/TAGS/tag_li.asp).
 
-**Goal:  Briefly...**
+#### Goal:  Briefly...
 
 - limit the results to the _list item_ **nodes** of the `body` of the HTML document tree.  This is done with the `html_nodes()` function.`html_nodes("li")`
 - Use the `html_text()` function to parse the text of the HTML _list item_ (i.e. the `<li>` tag)
 
-**For Example**
+#### For Example
 
 in an HTML document that has tagging such as this:
 
@@ -105,7 +105,7 @@ in an HTML document that has tagging such as this:
 
 I want to gather the text within the `<li>` tag:  **Anna Aaltse (1715 - 1738)**
 
-**CODE**
+#### CODE
 
 Using the `html_nodes()` and `html_text()` functions, I can retrieve all the text within `<li></li>` tags.
 
@@ -121,7 +121,7 @@ names
 
 Beyond the text you may also want attributes of HTML tags.  To mine the URL of a hypertext link `<a href="URL"></a>`, within a list item, you need to parse the HREF argument of an anchor tag.  If you're new to web scraping, you're going to need to learn something about HTML tags, such as the [anchor tag](https://www.w3schools.com/TAGS/tag_a.asp).
 
-**For Example**
+#### For Example
 
 in an HTML document that has tagging such as this:
 
@@ -131,7 +131,7 @@ in an HTML document that has tagging such as this:
 
 I want to gather the value of the `href` attribute within the anchor tag:  **https://search.com**
 
-**CODE**
+#### CODE
 
 Using the `html_nodes()` and `html_attr()` functions, I can retrieve all the attribute values within `<li><a></a></li>` tags.
 
@@ -145,7 +145,7 @@ url
 
 Note that the above links, or _hrefs_, are relative URL paths.  I still need the domain name for the web server `http://www.vondel.humanities.uva.nl`.
 
-## Systematize
+## Systematize targets
 
 Above I created two vectors, one vector, `names`, is the `html_text` that I parsed from the `<li>` tags within the `<body>` of the HTML document.  The other vector, `url`, is a vector of the values of the `href` attribute of the anchor `<a>` tags. 
 
@@ -208,7 +208,7 @@ This is key.  When web scraping, you are effectively reverse engineering the web
 
 Anyway, an example of a CSS element in the results page is 'class' attribute of the `<div>` tag.  In the case below we also have a class value of "subnav".  Viewing the source HTML of one summary results page will show the `<div>` tags with the CSS _class_ element.
 
-**For Example**   
+#### For Example   
 
 Use is `html_nodes()` with `html_text()`, and `html_attr()` to parse the anchor tag nodes, `<a>`, found within the `<div>` tags which contain the `class="subnav"` attribute.
 
@@ -220,7 +220,7 @@ Use is `html_nodes()` with `html_text()`, and `html_attr()` to parse the anchor 
 </div>
 ```
 
-**CODE**  
+#### CODE  
 
 Parse the **text** of the navigation bar.
 
@@ -318,23 +318,41 @@ nav_df
 
 ## Iterate
 
-Use `purrr::map` **instead** of **'for'** loops.  Because purrr is the R/Tidyverse way.  'For' loops are fine, but invest some time learning purrr and you'll be better off.  Still, there's no wrong way to iterate as long as you get the right answer.  So, do what works.  Below is the Tidyverse/Purrr way....
+Use `purrr::map` **instead** of **'for'** loops.  Because [purrr](https://purrr.tidyverse.org) is the R/Tidyverse way.  'For' loops are fine, but invest some time learning purrr and you'll be better off.  Still, there's no wrong way to iterate as long as you get the right answer.  So, do what works.  Below is the Tidyverse/Purrr way....
 
-Now that I have a full list of navigation URLs, each of which represents a web page that has a summary of 50 names/links.  My next task is to read the HTML of each URL representing a target-name.  By reading the URL (importing the HTML) for each target name, I will then have HTML for each individual target person in the database.  Of course, I still, then, have to read and parse the HTML of those target-name pages, but I can do that.  The scraping (crawling + parsing) works when I have a URL per target person.  Having a URL for each target person means I can systematically scrape the web site.  In other words, I crawl the summary navigation to construct a URL for each summary page.  Then I import HTML for each summary page to get a URL to each person's page.  Then I import each person's page and parse the HTML for each person's record.
+Now that I have a full list of navigation URLs, each of which represents a web page that has a summary of 50 names/links.  My next task is to read the HTML of each URL representing a target-page -- in this case a target is a detailed page with structured biographical information about an artist.  By reading the URL (importing the HTML) for each target name, I will then have HTML for each individual target person.  Of course, I still, then, have to read and parse the HTML of those target-name pages, but I can do that.  The scraping (crawling + parsing) works when I have a URL per target person.  Because, having a URL for each target-person's page means I can systematically scrape the web site.  In other words, I can crawl the summary navigation to construct a full URL for each name (i.e page.) Then I import (i.e. `read_html()`) each person's page and parse the HTML for each person's information.
 
 But, back to the current task:  import the HTML for each summary results page of 50 records...
 
+> You should read the notes below, but tl;dr: skip to the CODE below
+
+### Notes on being a good scraper
+
+#### Pause
+
 **Note**: that, below, I introduce a **pause** (`Sys.sleep()`) in front of each `read_html()` function.  This is a common technique for well behaved web scraping.  Pausing before each `read_html` function, avoids overwhelming my target's server/network infrastructure.  If I overwhelm the target server, the server host-people may consider me a DNS attack.  If they think I'm a DNS attacker, they might choose to block my computer from crawling their site.  If that happens, I'm up a creek.  I don't want that.  I want my script to be a well behaved bot-crawler.  
 
-Speaking of being a good and honorable scraper-citizen, did I browse the [robots.txt](http://www.vondel.humanities.uva.nl/robots.txt) page for the site?  Did I check the site for a Terms of Service page?  Did I look to see if there were any written prohibitions against web crawling, systematic downloading, copyright, or licensing restrictions?  I did and you should too.  As of this writing, there do not appear to be any restrictions for this site.  You should perform these types of good-scraping hygiene steps for every site you want to scrape!
+#### robots.txt
 
-Note:  Below, for development purposes, I limited my crawling to 3 results links:  `my_url_df$url[1:3]`.  Be conservative during your code development to avoid appearing as a DNS attacker.  Later, when you are ready to crawl your whole target site, you'll want to remove such limits (i.e. `[1:3]`.)  But for now, do everyone a favor and try not to be over confident.  Stay in the kiddie pool.  Do your development work until you are sure you're not accidentally unleashing a malicious or poorly constructed web crawler.
+Speaking of being a good and honorable scraper-citizen, did I browse the [robots.txt](http://www.vondel.humanities.uva.nl/robots.txt) page for the site?  Did I check the site for a Terms of Service page?  Did I look to see if there were any written prohibitions against web crawling, systematic downloading, copyright, or licensing restrictions?  I did **and you should too**.  As of this writing, there do not appear to be any restrictions for this site.  You should perform these types of good-scraping hygiene steps for every site you want to scrape!
+
+#### Development v production
+
+Note:  Below, for **development** purposes, I limit my crawling to 3 results pages of fifty links each:  `my_url_df$url[1:3]`.  Be conservative during your code development to avoid appearing as a DNS attacker.  Later, when you are ready to crawl your whole target site, you'll want to remove such limits (i.e. `[1:3]`.)  But for now, do everyone a favor and try not to be over confident.  Stay in the kiddie pool.  Do your development work until you are sure you're not accidentally unleashing a malicious or poorly constructed web crawler.
+
+#### Keep records of critical data
 
 Note:  Below, I am keeping the original target URL variable, `summary_url`, for later reference.  This way I will have a record of which parsed data results came from which URL web page.  
 
+#### Working with lists
+
 Note:  Below, the final result is a tibble with a vector, `summary_url`, and an associated column of HTML results, each result is stored as a nested R _list_.  That is, a column of data types that are all "_lists_", aka a "_list column_".  Personally I find lists to be a pain. I prefer working with tibbles (aka _data frames_.).  But _lists_ appear often in R data wrangling, especially when scraping with `rvest`.  The more you work with _lists_, the more you come to tolerate _lists_ for the flexible data type that they are.  Anyway, if I were to look at only the first row of results from the html_results column, `nav_results_list$html_results[1]`, I would find a _list_ of the raw HTML from the first summary results page imported via `read_html()`.  
 
-Recapping:  This is testing. I have three URLs `(html_reults[1:3])`, one for each of the first three navigation summary pages.  Each summary page will contain the raw HTML for 50 names. I will `read_html` each link, waiting 2 seconds between each `read_html`.  
+### CODE 
+
+> **tl;dr** This is testing. I have three URLs `(html_reults[1:3])`, one for each of the first three navigation summary pages.  Each summary page will contain the raw HTML for 50 names. I will `read_html` each link, waiting 2 seconds between each `read_html`.
+
+#### map the read_html() function
 
 ```{r}
 nav_results_list <- tibble(
@@ -351,10 +369,14 @@ nav_results_list <- tibble(
 
 nav_results_list
 ```
+Above, I have three rows of _lists_, each list is the read_html() results of a summary results page, i.e. each list has 50 URLs and text of my eventual targets.
 
-Now I have three rows of _lists_, each list with 50 links, in a tibble.  Each link leads to a target name that I can eventually `read_html` to gather the raw HTML of that target name. 
+- `nav_results_list$summary_url` is the URL for each summary page.  
+- `nav_results_list$html_results` is the `read_html()` results that I want to parse for the href attributes and the html_text 
 
-But first, I want to expand the three lists so I have a single tibble of 150 URLs to target names.  Using purrr (`map()`), I can iterate over the results _lists_, parsing the HTML nodes with `html_attr()` and `html_text()`.  It is convenient to keep this parsed data in a tibble.  The results will be nested lists within a tibble.  When I expand the nested _list_ with the `unnest()` function, I then have a single tibble with 150 URLs and 150 names, one row for each target name.  
+#### map parsing functions
+
+Right.  Using purrr (`map()`), I can iterate over the html_results _lists_, parsing each _list_ with the `html_attr()` and `html_text()` functions.  It is convenient to keep this parsed data in a tibble as a list: one column for the URL targets ; one column for the html text (which will contain the names of the person for whom the target URL corresponds.)  The results are  nested lists within a tibble.  
 
 ```{r}
 results_by_page <- tibble(summary_url = nav_results_list$summary_url, 
@@ -372,7 +394,14 @@ results_by_page <- tibble(summary_url = nav_results_list$summary_url,
                           )
 
 results_by_page
+```
 
+#### unnest
+
+When I unnest the nested _list_, I then have a single tibble with 150 URLs and 150 names, one row for each target name.  (I also used `filter()` to do some more regex data cleanup, which I alluded to near the beginning of this document.)
+
+
+```{r}
 results_by_page %>% 
   unnest(cols = c(url, name)) %>% 
   filter(!str_detect(name, "ECARTICO")) %>% 
@@ -380,11 +409,37 @@ results_by_page %>%
   
 ```
 
-Now I can iterate over each one of the URLs to the target names.  Then I can parse the raw HTML for each target name page. When I follow the links for each name, I have the raw HTML of each person, in _lists_, ready to be parsed with the `html_nodes`, `html_text`, and `html_attr` functions.
+Now, my `results_by_page` tibble consists of three column variables
 
-## Parsing example for an individual 
+- `summary_url`:  the link to the Summary Results page which contains the name of each targets-person
+- `url`: the relative URL for each target-person
+- `name`: the name of each target-person
 
-Now you know how to get a URL for each name in the target database.  That is, you can crawl the target site's navigation.  The next goal is to import and parse the HTML for each _name_.  In other words, in my development tibble, I still need to crawl the individual target names, all 150 names, 50 names per summary page for each of the 3 development pages.  Below is an example of gathering and parsing information for one URL representing one person.  The information gathered is information from the detailed names page about the children of one person in the target database.
+Now I can iterate over each row of my `results_by_page$url` vector to read_html for each target.  Then I can parse the raw HTML for each target name page. When I follow the links for each name, I have the raw HTML of each person, in _lists_, ready to be parsed with the `html_nodes`, `html_text`, and `html_attr` functions.
+
+## Web scraping
+
+Now you know how to _crawl_ a website to get a URL for each name found at the source web site.  (i.e. crawl the site's navigation.)  The next goal is to `read_html()` to ingest and parse the HTML for each target.  
+
+> Web scraping = crawling + parsing
+
+Below is an example of gathering and parsing information for one URL representing one person.  
+
+### Goal
+
+Ingest, i.e. `read_html()`, each target name, then parse the results of each to mine each target for specific information.  In this case, I want the names of each person's children.
+
+#### CODE
+
+The information gathered is information from the detailed names page about the children of one person in the target database.
+
+[Emanuel Adriaenssen](http://www.vondel.humanities.uva.nl/ecartico/persons/10579) has three children:
+
+- Children
+
+  - Alexander Adriaenssen, alias: Sander (1587 - 1661)
+  -   Vincent Adriaenssen I, alias: Manciola / Leckerbeetien (1595 - 1675)
+  -   Niclaes Adriaenssen, alias: Nicolaes Adriaenssen (1598 - ca. 1649)
 
 ```{r}
 # http://www.vondel.humanities.uva.nl/ecartico/persons/10579
@@ -413,8 +468,9 @@ child_text %>%
 
 
 ```
+#### Iterate
 
-Don't forget to use a pause `Sys.sleep()` between each systematic iteration of the `read_html()` function.
+There now. I just scraped and parsed data for one target, one person in my list of target URLs.  Now use purrr to iterate over each target URL in the list. **Do not forget to pause, `Sys.sleep(2)`,** between each iteration of the `read_html()` function.
 
 ## Resources
 
