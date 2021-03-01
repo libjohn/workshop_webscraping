@@ -1,0 +1,11 @@
+---
+title: "slides child footer"
+---
+
+<div class="footercc">
+<i class="fab fa-creative-commons"></i>&nbsp; <i class="fab fa-creative-commons-by"></i><i class="fab fa-creative-commons-nc"></i>  <a href = "https://JohnLittle.info"><span class = "opacity30">https://</span>JohnLittle<span class = "opacity30">.info</a> | 
+<a href="https://github.com/libjohn/workshop_webscraping">https://github.com/libjohn/workshop_webscraping</a> | `r Sys.Date()` </span>
+</span></div>
+
+
+
