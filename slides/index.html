@@ -4,7 +4,7 @@
     <title>R case study: web scraping</title>
     <meta charset="utf-8" />
     <meta name="author" content="John Little" />
-    <meta name="date" content="2021-03-01" />
+    <meta name="date" content="2021-03-02" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link href="libs/tachyons/tachyons.min.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
@@ -18,7 +18,7 @@ class: center, middle, inverse, title-slide
 
 # R case study: web scraping
 ### John Little
-### 2021-03-01
+### 2021-03-02
 
 ---
 
@@ -34,24 +34,24 @@ I would like to take a moment to honor the land in Durham, NC.  Duke University 
 ---
 ## Demonstration Goals
 
-- Building on earlier [Rfun workshops](https://rfun.library.duke.edu/)
-- Web scraping is fundamentally a deconstruction process
-- Introduce just enough HTML/CSS and HTTP
-- Introduce the `library(rvest)` package for harvesting websites/HTML
-- Tidyverse iteration with `purrr:map`
-- Point out useful documentation &amp; resources 
-
-.f7.i.moon-gray[This is a demonstration of leveraging the Tidyverse.  This is not an research design or HTML design class.  YMMV: data gathering and cleaning are vital and can be complex. ]
-
 
 
 &lt;div class="footercc"&gt;
 &lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
 &lt;/div&gt;
 
 
 
+
+- Building on earlier [Rfun workshops](https://rfun.library.duke.edu/)
+- Web scraping is fundamentally a deconstruction process
+- Introduce just enough HTML/CSS and HTTP
+- Introduce the `library(rvest)` package for harvesting websites/HTML
+- Tidyverse iteration with `purrr::map`
+- Point out useful documentation &amp; resources 
+
+.f7.i.moon-gray[This is a demonstration of leveraging the Tidyverse.  This is not an research design or HTML design class.  YMMV: data gathering and cleaning are vital and can be complex. ]
 
 --
 
@@ -61,10 +61,16 @@ I would like to take a moment to honor the land in Durham, NC.  Duke University 
 - Read and honor the host's robots.txt | https://www.robotstxt.org
     - Always **pause** to avoid the perception of a _Denial of Service_ (DOS) attack
     
-
-
 ---
-class:middle
+
+
+&lt;div class="footercc"&gt;
+&lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
+&lt;/div&gt;
+
+
+
 
 .left-column[
 ### Scraping =
@@ -74,19 +80,8 @@ class:middle
 ![scraping bee propolis](images/Scraping_propolis.jpg "scraping propolis")
 &amp;nbsp;  
 `rvest::`  
-`read_html()`
-
+`read_html()`  
 ]
-
-
-
-&lt;div class="footercc"&gt;
-&lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
-&lt;/div&gt;
-
-
-
 
 --
 
@@ -101,7 +96,18 @@ class:middle
 .pull-left[
 .f7[Systematically iterating through a website, gathering data from more than one page (URL)]
 
-`purrr::map()`
+`purrr::map()`  
+
+&amp;nbsp;  
+
+&amp;nbsp;  
+
+&amp;nbsp;  
+
+
+.f7[
+https://purrr.tidyverse.org  
+]
 ]
 
 
@@ -110,9 +116,21 @@ class:middle
 
 `rvest::html_nodes()`  
 `rvest::html_text()`  
-`rvest::html_attr()`
+`rvest::html_attr()`  
+
+&amp;nbsp;  
+
+&amp;nbsp;   
+
+
+.f7[
+https://rvest.tidyverse.org    
+
 ]
 ]
+]
+
+
 
 ---
 ## HTML
@@ -138,7 +156,7 @@ Hypter Text Markup Language
 
 &lt;div class="footercc"&gt;
 &lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
 &lt;/div&gt;
 
 
@@ -175,7 +193,7 @@ for example:  http://www.vondel.humanities.uva.nl/style.css
 
 &lt;div class="footercc"&gt;
 &lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
 &lt;/div&gt;
 
 
@@ -206,7 +224,7 @@ The basic workflow of web scraping is
 
 &lt;div class="footercc"&gt;
 &lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
 &lt;/div&gt;
 
 
@@ -223,7 +241,7 @@ background-image: url(images/selector_graph.png)
 
 &lt;div class="footercc"&gt;
 &lt;i class="fab fa-creative-commons"&gt;&lt;/i&gt;&amp;nbsp; &lt;i class="fab fa-creative-commons-by"&gt;&lt;/i&gt;&lt;i class="fab fa-creative-commons-nc"&gt;&lt;/i&gt;  &lt;a href = "https://JohnLittle.info"&gt;&lt;span class = "opacity30"&gt;https://&lt;/span&gt;JohnLittle&lt;span class = "opacity30"&gt;.info&lt;/span&gt;&lt;/a&gt; 
-&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-01 &lt;/span&gt;
+&lt;span class = "opacity30"&gt; | &lt;a href="https://github.com/libjohn/workshop_webscraping"&gt;https://github.com/libjohn/workshop_webscraping&lt;/a&gt; | 2021-03-02 &lt;/span&gt;
 &lt;/div&gt;
 
 
