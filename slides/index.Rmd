@@ -126,7 +126,7 @@ Hypter Text Markup Language
 ```{r child="_child-footer.Rmd", include=FALSE}
 ```
 ---
-## CSS
+## HTML + CSS
 
 Cascading Style Sheets
 
@@ -135,16 +135,22 @@ Cascading Style Sheets
 <html>
 <body>
 
-  <div class=”abc”>  </div>
+  <div class="abc"> ... </div>
   
-  <div id=”xyz”> </div>
+  <div id="xyz"> 
+    <span class="foo"> ... </span>
+  </div>
+  
+  <span id="bar"> ... </span>
 
 </body>
 </html>
 
 ```
 
-http://www.vondel.humanities.uva.nl/style.css
+&nbsp;  
+
+for example:  http://www.vondel.humanities.uva.nl/style.css
 
 
 ```{r child="_child-footer.Rmd", include=FALSE}
@@ -178,11 +184,12 @@ background-image: url(images/selector_graph.png)
 
 <!-- an image of branches and nodes -->
 
-?? an image of branches and nodes
+??? an image of branches and nodes
 
 
 ```{r child="_child-footer.Rmd", include=FALSE}
 ```
+
 ---
 class:  middle, center
 
