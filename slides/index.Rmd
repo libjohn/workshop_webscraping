@@ -202,8 +202,6 @@ background-image: url(images/selector_graph.png)
 
 <!-- an image of branches and nodes -->
 
-??? an image of branches and nodes
-
 
 ```{r child="_child-footer.Rmd", include=FALSE}
 ```
