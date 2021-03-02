@@ -1,0 +1,52 @@
+---
+title: "Your Turn"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+```
+
+
+Gather the HTML for
+
+http://www.vondel.humanities.uva.nl/ecartico/persons/37598
+
+
+```{r}
+mypage <- read_html("_________________")
+mypage
+```
+
+
+Display all the href attributes for the anchor text on the collected page
+
+```html
+<a href="https://foo.com">my link</a>
+```
+
+```{r}
+mypage %>% 
+  html_nodes("____") %>% 
+  html_attr("____")
+```
+
+
+Practice using selector gadget and gather only the text from the list items in the sections: Marriages, Occupation(s), and Occupational address(es).
+
+
+```{r}
+mypage %>% 
+  html_nodes("_______") %>% 
+  html_text()
+```
+
+
+What are the main subject headings on the page?
+
+```{r}
+mypage %>% 
+  html_nodes("___") %>% 
+  html_text()
+```
