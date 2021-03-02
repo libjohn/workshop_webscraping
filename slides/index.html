@@ -41,14 +41,8 @@ I would like to take a moment to honor the land in Durham, NC.  Duke University 
 - Tidyverse iteration with `purrr:map`
 - Point out useful documentation &amp; resources 
 
-.f7.i.moon-gray[This is not an research design or HTML design class. YMMV: data gathering and cleaning are vital and can be complex. This is a demonstration of leveraging the Tidyverse.]
+.f7.i.moon-gray[This is a demonstration of leveraging the Tidyverse.  This is not an research design or HTML design class.  YMMV: data gathering and cleaning are vital and can be complex. ]
 
-### Caveats
-- You will be as successful as the web author(s) were consistent 
-- Read and follow the _Terms of Use_ for any target web host
-- Read and honor the host's robots.txt | https://www.robotstxt.org
-    - Always **pause** to avoid the perception of a _Denial of Service_ (DOS) attack
-    
 
 
 &lt;div class="footercc"&gt;
@@ -59,11 +53,21 @@ I would like to take a moment to honor the land in Durham, NC.  Duke University 
 
 
 
+--
+
+### Caveats
+- You will be as successful as the web author(s) were consistent 
+- Read and follow the _Terms of Use_ for any target web host
+- Read and honor the host's robots.txt | https://www.robotstxt.org
+    - Always **pause** to avoid the perception of a _Denial of Service_ (DOS) attack
+    
+
+
 ---
 class:middle
 
 .left-column[
-### Scraping 
+### Scraping =
 
 .f6[Gather or ingest web page data for analysis]
 
@@ -74,34 +78,6 @@ class:middle
 
 ]
 
-.right-column[
-
-**&lt;span text-align: left;&gt;Crawling&lt;span&gt; &lt;span text-align: center;&gt;+&lt;/span&gt; &lt;span text-align:right;&gt;Parsing&lt;/span&gt;**
-
-&lt;div class = "container" id = "imgspcl" style="width: 100%; max-width: 100%;"&gt;
-&lt;img src = "images/crawling_med.jpg" width = "50%"&gt; &amp;nbsp; + &amp;nbsp; &lt;img src = "images/strain_comb.jpg" width="50%"&gt;
-&lt;/div&gt;
-
-
-
-.pull-left[
-.f7[Systematically iterating through a website, gathering data from more than one page (URL)]
-
-`purrr::map()`
-]
-
-.pull-right[
-.f7[Separating the syntactic elements of the HTML.  Keeping only the data you need]
-
-`rvest::html_nodes()`  
-`rvest::html_text()`  
-`rvest::html_attr()`
-]
-
-
-]
-
-
 
 
 &lt;div class="footercc"&gt;
@@ -112,6 +88,31 @@ class:middle
 
 
 
+--
+
+.right-column[
+
+** Crawling + Parsing**
+
+&lt;div class = "container" id = "imgspcl" style="width: 100%; max-width: 100%;"&gt;
+&lt;img src = "images/crawling_med.jpg" width = "50%"&gt; &amp;nbsp; + &amp;nbsp; &lt;img src = "images/strain_comb.jpg" width="50%"&gt;
+&lt;/div&gt;
+
+.pull-left[
+.f7[Systematically iterating through a website, gathering data from more than one page (URL)]
+
+`purrr::map()`
+]
+
+
+.pull-right[
+.f7[Separating the syntactic elements of the HTML.  Keeping only the data you need]
+
+`rvest::html_nodes()`  
+`rvest::html_text()`  
+`rvest::html_attr()`
+]
+]
 
 ---
 ## HTML
@@ -181,20 +182,19 @@ The basic workflow of web scraping is
 
 1. Development
 
-    - Import raw HTML of a single target page (page detail, or “leaf”)
-    - Parse the HTML of the test page to gather the data you want
-    - Check robots.txt, terms of use
-    - In a web browser, manually browse and understand the site navigation of the scrape target (site navigation, or “branches”)
-    - Parse the site navigation and develop an interation plan
-    - Iterate: write code that implements iteration, i.e. automated page crawling
+    - Import raw HTML of a single target page (page detail:  a leaf or node)
+    - Parse the HTML of the test page and gather specific data 
+    - Check _robots.txt_ and _Terms Of Use_ (TOU)
+    - In a web browser, manually browse and understand the target site's navigation (site navigation: branches)
+    - _Parse_ the site navigation and develop an _iteration_ plan
+    - _Iterate_: orchestrate/automate page crawling
     - Perform a dry run with a limited subset of the target web site
-    - Construct time pauses (to avoid DNS attacks)
-    - Production
+    - Construct pauses:  avoid the posture of a DNS attack
 
-1. Iterate
+1. Production
 
-    - Crawl the site navigation (branches)
-    - Parse HTML for each detail page (leaves)
+    - Iterate/Crawl the site (navigation: branches)
+    - Parse HTML for each target page (pages: leaves or nodes)
 
 
 
@@ -207,6 +207,10 @@ The basic workflow of web scraping is
 
 ---
 background-image: url(images/selector_graph.png)
+
+&lt;!-- an image of branches and nodes --&gt;
+
+?? an image of branches and nodes
 
 
 
