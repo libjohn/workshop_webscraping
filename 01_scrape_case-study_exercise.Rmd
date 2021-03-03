@@ -2,7 +2,10 @@
 title: "rvest tutorial demonstration"
 author: "John Little"
 date: "`r Sys.Date()`"
-output: html_notebook
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 license: "CC BY-NC"  
@@ -458,7 +461,8 @@ There now. I just scraped and parsed data for one target, one person in my list 
 
 ## Resources
 
-- https://rvest.tidyverse.org/
+- https://rvest.tidyverse.org
+- https://purrr.tidyverse.org
 - https://community.rstudio.com/t/loop-for-with-rvest-for-scraping/56133/4 (looping with RVEST)
 - purrr / map ::  https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html
 
