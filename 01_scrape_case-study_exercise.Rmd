@@ -12,7 +12,7 @@ https://creativecommons.org/licenses/by-nc/4.0/
 
 ## Load library packages
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(rvest)
 library(htmltools)
@@ -103,7 +103,9 @@ in an HTML document that has tagging such as this:
 <li><a href="/ecartico/persons/17296">Anna Aaltse (1715 - 1738)</a></li>
 ```
 
-I want to gather the text within the `<li>` tag:  **Anna Aaltse (1715 - 1738)**
+I want to gather the text within the `<li>` tag:  e.g. **Anna Aaltse (1715 - 1738)**
+
+You can use the [Selector Gadget](https://selectorgadget.com/) to help you identify the HTML/CSS tags and codes.
 
 #### CODE
 
@@ -111,7 +113,7 @@ Using the `html_nodes()` and `html_text()` functions, I can retrieve all the tex
 
 ```{r}
 names <- results %>% 
-  html_nodes("li") %>% 
+  html_nodes("#setwidth li a") %>% 
   html_text()
 
 names
@@ -137,7 +139,7 @@ Using the `html_nodes()` and `html_attr()` functions, I can retrieve all the att
 
 ```{r}
 url <- results %>% 
-  html_nodes("li a") %>% 
+  html_nodes("#setwidth li a") %>% 
   html_attr("href")
 
 url
@@ -172,7 +174,7 @@ Create some new variables with `mutate`.  Build a **full** URL from the _relativ
 ```{r}
 urls_to_crawl_df <- results_df %>% 
   mutate(full_url = glue::glue("http://www.vondel.humanities.uva.nl{url}")) %>% 
-  mutate(full_url = str_replace_all(full_url, "\\.\\.", "")) %>% 
+  # mutate(full_url = str_replace_all(full_url, "\\.\\.", "")) %>% 
   select(full_url)
 
 urls_to_crawl_df  
@@ -226,7 +228,7 @@ Parse the **text** of the navigation bar.
 
 ```{r}
 results %>% #html_nodes("div.subnav")
-  html_nodes("div.subnav a") %>% 
+  html_nodes("form+ .subnav") %>% 
   html_text()
 
 ```
@@ -235,7 +237,7 @@ Parse the HTML _href_ **attribute** to get the URL.
 
 ```{r loop}
 navigation <- results %>% 
-  html_nodes("div.subnav a") %>% 
+  html_nodes("form+ .subnav a") %>% 
   html_attr("href")
 
 navigation
@@ -272,7 +274,6 @@ Below, use `dplyr::distinct()` and `stringr::string_extract()` among other tidyv
 ```{r}
 nav_df <- nav_df %>%
   filter(str_detect(navigation, "&page=")) %>%
-  distinct(navigation) %>%
   mutate(page_no = str_extract(navigation, "\\d+$")) %>%
   mutate(page_no = as.numeric(page_no))
 
@@ -369,6 +370,7 @@ nav_results_list <- tibble(
 
 nav_results_list
 ```
+
 Above, I have three rows of _lists_, each list is the read_html() results of a summary results page, i.e. each list has 50 URLs and text of my eventual targets.
 
 - `nav_results_list$summary_url` is the URL for each summary page.  
@@ -383,12 +385,12 @@ results_by_page <- tibble(summary_url = nav_results_list$summary_url,
                           url =
                             map(nav_results_list$html_results,
                                 ~ .x %>%
-                                  html_nodes("ul li a") %>%
+                                  html_nodes("#setwidth li a") %>%
                                   html_attr("href")),
                           name =
                             map(nav_results_list$html_results,
                                 ~ .x %>%
-                                  html_nodes("ul li a") %>%
+                                  html_nodes("#setwidth li a") %>%
                                   html_text()
                                 )
                           )
@@ -403,9 +405,7 @@ When I unnest the nested _list_, I then have a single tibble with 150 URLs and 1
 
 ```{r}
 results_by_page %>% 
-  unnest(cols = c(url, name)) %>% 
-  filter(!str_detect(name, "ECARTICO")) %>% 
-  filter(!str_detect(name, "^\\+"))
+  unnest(cols = c(url, name)) 
   
 ```
 
@@ -447,26 +447,10 @@ The information gathered is information from the detailed names page about the c
 
 emanuel <-  read_html("http://www.vondel.humanities.uva.nl/ecartico/persons/10579")
 
-child_filter <- emanuel %>% 
-  html_nodes("ul li a") %>% 
-  html_attr("rel") %>% 
-  as_tibble() %>% 
-  mutate(id = row_number()) %>% 
-  filter(str_detect(value, "children"))
-child_filter
-
-child_text <- emanuel  %>% 
-  html_nodes("ul li a") %>% 
-  html_text() %>% 
-  as_tibble() %>% 
-  rename(text = value) %>% 
-  mutate(id = row_number()) %>% 
-  inner_join(child_filter)
-
-child_text %>% 
-  pull(text)
-
-
+children_name <- emanuel %>% 
+  html_nodes("ul~ h2+ ul li > a") %>% 
+  html_text()
+children_name
 ```
 #### Iterate
 
