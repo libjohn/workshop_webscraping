@@ -42,7 +42,7 @@ I would like to take a moment to honor the land in Durham, NC.  Duke University 
 
 - Building on earlier [Rfun workshops](https://rfun.library.duke.edu/)
 - Web scraping is fundamentally a deconstruction process
-- Introduce just enough HTML/CSS and HTTP
+- Introduce just enough HTML/CSS
 - Introduce the `library(rvest)` package for harvesting websites/HTML
 - Tidyverse iteration with `purrr::map`
 - Point out useful documentation & resources 
