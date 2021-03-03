@@ -22,10 +22,6 @@ mypage
 
 Display all the href attributes for the anchor text on the collected page
 
-```html
-<a href="https://foo.com">my link</a>
-```
-
 ```{r}
 mypage %>% 
   html_nodes("a") %>% 
