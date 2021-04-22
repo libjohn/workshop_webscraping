@@ -19,7 +19,14 @@ in R.
 -   Introduce the `library(rvest)` package for harvesting websites/HTML
 -   Tidyverse iteration with `purrr::map`
 
-Video: <https://youtu.be/8ISc8V9GDAg>
+**Workshop Video**: <https://youtu.be/8ISc8V9GDAg>
+
+**See Also**: [*What to know about law & ethics when archiving & mining
+data*](slides/What%20to%20know%20about%20law%20&%20ethics_Archiving%20&%20Mining_15%20Min_with%20notes.pdf)
+by Rachael Samberg, J.D., MLIS Timothy Vollmer, MIS & the UC Berkeley
+Office of Scholarly Communication Services youtube [playlists on
+navigating intellectual property, copyright,
+fair-use](https://www.youtube.com/channel/UCNUMwTyK0raTNNZVjhgB7KA/playlists)
 
 ------------------------------------------------------------------------
 
