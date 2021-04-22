@@ -27,9 +27,9 @@ by Rachael Samberg, J.D., MLIS Timothy Vollmer, MIS & the UC Berkeley
 Office of Scholarly Communication Services youtube [playlists on
 navigating intellectual property, copyright,
 fair-use](https://www.youtube.com/channel/UCNUMwTyK0raTNNZVjhgB7KA/playlists).
-Please note Samberg/Vollmer slides are found in this github repo’s
-slides folder and are redistributed with permission from the slide
-authors.
+**Please note**, the Samberg/Vollmer slides are found in this github
+repo’s slides folder and are redistributed with permission from the
+slide authors.
 
 ------------------------------------------------------------------------
 
