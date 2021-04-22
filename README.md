@@ -1,7 +1,7 @@
 README
 ================
 John Little
-2021-03-03
+2021-04-22
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -19,7 +19,9 @@ in R.
 -   Introduce the `library(rvest)` package for harvesting websites/HTML
 -   Tidyverse iteration with `purrr::map`
 
-–
+Video: <https://youtu.be/8ISc8V9GDAg>
+
+------------------------------------------------------------------------
 
 ## License
 

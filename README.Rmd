@@ -28,7 +28,9 @@ Using the `rvest` library to learn about web crawling and HTML parsing in R.
 - Introduce the `library(rvest)` package for harvesting websites/HTML
 - Tidyverse iteration with `purrr::map`
 
---
+Video:  https://youtu.be/8ISc8V9GDAg
+
+***
 
 
 ## License
