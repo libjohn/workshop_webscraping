@@ -1,15 +1,21 @@
 README
 ================
 John Little
-2021-04-22
+2021-06-08
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-status: developing
 
 ## A workshop case study on webscraping
 
 <!-- badges: start -->
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4908875.svg)](https://doi.org/10.5281/zenodo.4908875)
+
+[![Lifecycle
+Badge](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+
+[![Launch Rstudio
+Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/libjohn/workshop_webscraping/main?urlpath=rstudio)
 <!-- badges: end -->
 
 Using the `rvest` library to learn about web crawling and HTML parsing

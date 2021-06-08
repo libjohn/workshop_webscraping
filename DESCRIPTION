@@ -1,0 +1,26 @@
+Type: Compendium
+Package: Compendium title
+Title: Web scraping with rvest, a case study
+Version: 1.1.0
+Authors@R: 
+    person(given = "John",
+           family = "Little",
+           role = c("aut", "cre"),
+           email = "John.Little@Duke.edu")
+Description: Using the rvest library to learn about web crawling and HTML parsing in R.
+License: CC BY-NC
+Depends: 
+    glue,
+    gt,
+    htmltools,
+    knitr,
+    rmarkdown,
+    rvest,
+    tidyverse,
+    xaringan,
+    xaringanExtra,
+    xaringanthemer
+Remotes: 
+    gadenbuie/xaringanExtra
+Encoding: UTF-8
+LazyData: true
