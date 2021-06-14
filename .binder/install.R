@@ -1,0 +1,12 @@
+install.packages(
+  "glue",
+  "gt",
+  "htmltools",
+  "knitr",
+  "rmarkdown",
+  "rvest",
+  "tidyverse",
+  "xaringan",
+  "xaringanExtra",
+  "xaringanthemer"
+)
