@@ -1,3 +1,5 @@
 *.Rmd linguist-language=R
 *.R linguist-language=R
 *.html linguist-documentation
+*.css linguist-documentation
+*.js linguist-documentation

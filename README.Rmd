@@ -18,11 +18,15 @@ knitr::opts_chunk$set(
 ## A workshop case study on webscraping
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4908875.svg)](https://doi.org/10.5281/zenodo.4908875)
 
-[![Lifecycle Badge](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)  
+<!-- DOI All versions 10.5281/zenodo.4908874 -->
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.4908874 (Latest Version Release)-blue "DOI")](https://doi.org/10.5281/zenodo.4908874)  
 
-[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/libjohn/workshop_webscraping/main?urlpath=rstudio)
+[![ORCID](https://img.shields.io/badge/ORCID-0000--0002--3600--0972-A6CE39?logo=ORCID&logoColor=A6CE39 "ORCID")](https://orcid.org/0000-0002-3600-0972)
+
+[![Creative Commons CC BY-NC](https://img.shields.io/badge/Creative Commons-BY--NC-EF9421?logo=creative commons&logoColor=EF9421 "CC BY-NC")](https://creativecommons.org/licenses/by-nc-nd/4.0/)   
+
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg "Launch RStudio Binder")](https://mybinder.org/v2/gh/libjohn/workshop_webscraping/main?urlpath=rstudio)
 <!-- badges: end -->
 
 Using the `rvest` library to learn about web crawling and HTML parsing in R.

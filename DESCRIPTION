@@ -1,7 +1,7 @@
 Type: Compendium
-Package: Compendium title
+Package: Coontainer for R workshop on rvest
 Title: Web scraping with rvest, a case study
-Version: 1.1.0
+Version: 1.1.1
 Authors@R: 
     person(given = "John",
            family = "Little",
