@@ -176,8 +176,7 @@ Create some new variables with `mutate`.  Build a **full** URL from the _relativ
 
 ```{r}
 urls_to_crawl_df <- results_df %>% 
-  mutate(url = str_replace(url, "\\.\\.", "ecartico")) %>%   # fixing a relative path reference by replacing '..' with 'ecartico' 
-  mutate(full_url = glue::glue("http://www.vondel.humanities.uva.nl/{url}")) %>% 
+  mutate(full_url = glue::glue("http://www.vondel.humanities.uva.nl{url}")) %>% 
   # mutate(full_url = str_replace_all(full_url, "\\.\\.", "")) %>% 
   select(full_url)
 
@@ -301,7 +300,7 @@ nav_df <- nav_df %>%
   mutate(navigation = str_extract(navigation, ".*(?=\\=\\d+$)")) %>% 
   mutate(page_no = as.integer(str_replace(page_no, "^2$", "1"))) %>% 
   expand(navigation, page_no = full_seq(page_no, 1)) %>% 
-  transmute(url = glue::glue("https:{navigation}={page_no}"))
+  transmute(url = glue::glue("http://www.vondel.humanities.uva.nl{navigation}={page_no}"))
 
 # the regular expression '.*(?=\\=\\d+$)' can be read as: 
 # capture/find data found BEFORE '(?=<<pattern>>)' the pattern.  
@@ -409,9 +408,7 @@ When I unnest the nested _list_, I then have a single tibble with 150 URLs and 1
 
 ```{r}
 results_by_page %>% 
-  unnest(cols = c(url, name)) %>% 
-  mutate(url = str_replace(url, "\\.\\.", "ecartico")) %>%   # fixing a relative path reference by replacing '..' with 'ecartico' 
-  mutate(full_url = glue::glue("http://www.vondel.humanities.uva.nl/{url}")) 
+  unnest(cols = c(url, name)) 
   
 ```
 
