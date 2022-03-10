@@ -301,7 +301,7 @@ nav_df <- nav_df %>%
   mutate(navigation = str_extract(navigation, ".*(?=\\=\\d+$)")) %>% 
   mutate(page_no = as.integer(str_replace(page_no, "^2$", "1"))) %>% 
   expand(navigation, page_no = full_seq(page_no, 1)) %>% 
-  transmute(url = glue::glue("https:{navigation}={page_no}"))
+  transmute(url = glue::glue("http://www.vondel.humanities.uva.nl/ecartico/persons/{navigation}={page_no}"))
 
 # the regular expression '.*(?=\\=\\d+$)' can be read as: 
 # capture/find data found BEFORE '(?=<<pattern>>)' the pattern.  
