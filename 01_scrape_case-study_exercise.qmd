@@ -1,11 +1,25 @@
 ---
 title: "rvest tutorial demonstration"
-author: "John Little"
-date: "`r Sys.Date()`"
-output: 
-  html_document:
+
+author: 
+  - name: John R Little
+    affiliations:
+      - name: Duke University
+      - department: Center for Data & Vizualization Sciences
+
+# date: 'today'
+date-modified: 'today'
+date-format: long
+
+format: 
+  html:
+    embed-resources: true
+    footer: "[John R Little](https://JohnLittle.info) ● [Center for Data & Visualization Sciences](https://library.duke.edu/data/) ● [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
+    logo:  images/Rfun_logo.png
+    license: CC BY    
     toc: true
     toc_float: true
+    df-print: paged
 ---
 
 license: "CC BY-NC"  
@@ -15,11 +29,11 @@ https://creativecommons.org/licenses/by-nc/4.0/
 
 ## Load library packages
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r}
+#| message: false
+#| warning: false
 library(tidyverse)
 library(rvest)
-library(htmltools)
-tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
 ## Example
@@ -502,7 +516,7 @@ name_urls_df |>
 - purrr / map ::  https://jennybc.github.io/purrr-tutorial/ls01_map-name-position-shortcuts.html
 
 ---
-<center>
+
 **John Little**
 
 **Data Science Librarian**  
@@ -513,9 +527,5 @@ https://JohnLittle.info
 https://Rfun.library.duke.edu  
 https://library.duke.edu/data  
 
-<i class="fab fa-creative-commons fa-2x"></i> &nbsp; <i class="fab fa-creative-commons-by fa-2x"></i><i class="fab fa-creative-commons-nc fa-2x"></i>  
 Creative Commons:  Attribution-NonCommercial 4.0  
 https://creativecommons.org/licenses/by-nc/4.0
-</center>
-
-&nbsp;  
