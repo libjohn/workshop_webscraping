@@ -1,0 +1,183 @@
+---
+title: "R case study: web scraping"
+
+author: 
+  - name: John R Little
+    affiliations:
+      - name: Duke University
+      - department: Center for Data & Vizualization Sciences
+
+# date: 'today'
+date-modified: 'today'
+date-format: long
+
+format: 
+  revealjs:
+    embed-resources: true 
+    theme: [moon]
+    footer: "[John R Little](https://JohnLittle.info) ● [Center for Data & Visualization Sciences](https://library.duke.edu/data/) ● [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
+    logo:  images/Rfun_logo.png
+    license: CC BY
+
+editor: source    
+---
+
+```{r}
+library(tidyverse)
+library(gt)
+```
+
+## Duke University: Land Acknowledgement
+
+::: r-fit-text
+I want to take a moment to honor the land in Durham, NC. Duke University sits on the ancestral lands of the Shakori, Eno, and Catawba people. This institution of higher education is built on land stolen from those peoples. These tribes were here before the colonizers arrived. Additionally, this land has borne witness to over 400 years of the enslavement, torture, and systematic mistreatment of African people and their descendants. Recognizing this history is an honest attempt to break out beyond persistent patterns of colonization and to rewrite the erasure of Indigenous and Black peoples. There is value in acknowledging the history of our occupied spaces and places. I hope we can glimpse an understanding of these histories by recognizing the origins of collective journeys.
+:::
+
+## Demonstration Goals
+
+-   Building on earlier [Rfun workshops](https://rfun.library.duke.edu/)
+-   Web scraping is fundamentally a deconstruction process
+-   Introduce just enough HTML/CSS
+-   Introduce the `library(rvest)` package for harvesting websites/HTML
+-   Tidyverse iteration with `purrr::map` - Point out useful documentation & resources
+
+::: {.r-fit-text style="color:gray;"}
+This is a demonstration of leveraging the Tidyverse. This is not a research design or HTML design class. YMMV: data gathering and cleaning are vital and can be complex.
+:::
+
+## Caveats
+
+-   You will be as successful as the web author(s) were consistent
+-   Read and follow the *Terms of Use* for any target web host
+-   Read and honor the host's `robots.txt` \| `https://www.robotstxt.org`
+-   Always **pause** to avoid the perception of a *Denial of Service* (DOS) attack
+
+## Scraping
+
+\
+
+::: columns
+::: {.column width="33%"}
+Step one:\
+**Gather**\
+\
+
+::: {style="font-size: large;"}
+ingest web page data for analysis\
+:::
+
+\
+\
+
+::: {style="font-size: x-large;"}
+`rvest::read_html()`
+:::
+:::
+
+::: {.column width="33%"}
+Step two: **Crawling**\
+\
+
+::: {style="font-size: large;"}
+systematically (iterating) through a website, gathering data from more than one page (URL)\
+:::
+
+\
+
+::: {style="font-size: x-large;"}
+`purrr::map()`
+:::
+:::
+
+::: {.column width="33%"}
+Step three: **Parsing**\
+\
+
+::: {style="font-size: large;"}
+Separating the syntactic elements of a web page into meaningful data\
+:::
+
+\
+
+::: {style="font-size: x-large;"}
+`rvest::html_nodes()`\
+`rvest::html_text()`\
+`rvest::html_attr()`
+:::
+:::
+:::
+
+
+## HTML
+
+Hypter Text Markup Language
+
+```html
+<html>
+  <body>
+  
+    <h1>My First Heading</h1>
+    <p>My first paragraph contains a 
+    <a href="https://www.w3schools.com">link</a> to
+    W3schools.com
+    </p>
+  
+  </body>
+</html>
+
+```
+
+## HTML + CSS
+
+Cascading Style Sheets
+
+```html
+<html>
+<body>
+
+  <div class="abc"> ... </div>
+  
+  <div id="xyz"> 
+    <span class="foo"> ... </span>
+  </div>
+  
+  <span id="bar"> ... </span>
+
+</body>
+</html>
+
+```
+
+\
+
+:::{style="font-size: large;"}
+for example:  [https://www.vondel.humanities.uva.nl/style.css](https://www.vondel.humanities.uva.nl/style.css)
+:::
+
+## Procedure
+
+The basic workflow of web scraping is
+
+::: {.r-fit-text}
+1. Development
+
+    - Import raw HTML of a single target page (page detail:  a leaf or node)
+    - Parse the HTML of the test page and gather specific data 
+    - Check _robots.txt_ and _Terms Of Use_ (TOU)
+    - In a web browser, manually browse and understand the target site's navigation (site navigation: branches)
+    - _Parse_ the site navigation and develop an _iteration_ plan
+    - _Iterate_: orchestrate/automate page crawling
+    - Perform a dry run with a limited subset of the target web site
+    - Construct pauses:  avoid the posture of a DNS attack
+
+1. Production
+
+    - Iterate/Crawl the site (navigation: branches)
+    - Parse HTML for each target page (pages: leaves or nodes)
+:::
+
+## Site tree 
+
+<!-- {background-image="images/selector_graph.png" background-size="contain"} -->
+
+![](images/selector_graph.png)
